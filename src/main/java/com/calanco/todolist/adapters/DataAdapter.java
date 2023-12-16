@@ -90,14 +90,13 @@ public class DataAdapter {
     }
 
     public ListItem getItem(ListItem root, int id) {
-        if (root.getArrayList().size() == 0) {
-            if (root.getId() == id)
-                return root;
+        if (root.getId() == id) {
+            return root;
         } else {
             for (int i = 0; i < root.getArrayList().size(); i++) {
                 if (((ListItem) root.getArrayList().get(i)).getId() == id)
                     return (ListItem) root.getArrayList().get(i);
-                getItem((ListItem) root.getArrayList().get(i), id);
+                return getItem((ListItem) root.getArrayList().get(i), id);
             }
         }
         return null;
@@ -164,7 +163,7 @@ public class DataAdapter {
 
     public void add(String id, String title) throws IOException {
         ListItem all = getLists();
-        if (id.equals("root")){
+        if (id.equals("root")) {
             all.getArrayList().add(new ListItem(title));
             storeNew(all);
             return;
