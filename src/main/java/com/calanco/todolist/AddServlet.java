@@ -8,14 +8,21 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 @WebServlet("/add")
 public class AddServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        new DataAdapter(req.getContextPath()).add(
-                req.getParameter("id"),
-                req.getParameter("title"));
+        try {
+            new DataAdapter(req.getContextPath()).add(
+                    req.getParameter("id"),
+                    req.getParameter("title"),
+                    req.getParameter("date"),
+                    req.getParameter("type"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         resp.sendRedirect("index.jsp");
 
     }

@@ -3,8 +3,7 @@ package com.calanco.todolist.adapters;
 import com.calanco.todolist.model.ListItem;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
 import java.util.Stack;
 
 public class DataAdapter {
@@ -31,6 +30,12 @@ public class DataAdapter {
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("list.ser"));
         oos.writeObject(listItem);
         oos.close();
+    }
+    public void clear() throws IOException {
+        PrintWriter printWriter = new PrintWriter("list.ser");
+        printWriter.write("");
+        printWriter.flush();
+        printWriter.close();
     }
 
     public ListItem deserialize() throws IOException {
@@ -170,9 +175,9 @@ public class DataAdapter {
         storeNew(getRoot(parrent));
     }
 
-    public void add(String id, String title) throws IOException {
+    public void add(String id, String title, String date, String type) throws IOException, ParseException {
         ListItem item = getItem(getLists(), Integer.parseInt(id));
-        item.getArrayList().add(new ListItem(title, item));
+        item.getArrayList().add(new ListItem(title, item, date, type));
         ListItem lk = getRoot(item);
         storeNew(getRoot(item));
     }

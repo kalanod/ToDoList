@@ -14,11 +14,6 @@ import java.util.*;
 @WebServlet("/home")
 public class HelloServlet extends HttpServlet {
     private Names names;
-    public void init() {
-        names = new Names();
-        names.loadFromFile("db.txt");
-
-    }
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
 
