@@ -14,6 +14,6 @@ public class DeleteServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         DataAdapter adapter = new DataAdapter(req.getContextPath());
-        adapter.storeNew(adapter.delete(null, req.getParameter("id")));
+        adapter.delete(Integer.parseInt(req.getParameter("id")));
         resp.sendRedirect("index.jsp");    }
 }

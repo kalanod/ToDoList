@@ -18,6 +18,8 @@ public class DataAdapter {
 
     public ListItem getLists() {
         try {
+            ListItem item = deserialize();
+            if (item == null) storeNew(new ListItem("root", -1, 0, null));
             return deserialize();
         } catch (IOException e) {
             e.printStackTrace();
@@ -39,7 +41,7 @@ public class DataAdapter {
             objectinputstream = new ObjectInputStream(streamIn);
             readCase = (ListItem) objectinputstream.readObject();
         } catch (Exception e) {
-            readCase = new ListItem("root");
+            readCase = new ListItem("root", -1, 0, null);
         } finally {
             if (objectinputstream != null) {
                 objectinputstream.close();
@@ -48,90 +50,104 @@ public class DataAdapter {
         return readCase;
     }
 
-    public ListItem readData() {
-        ListItem root = new ListItem("root");
-        Stack<ListItem> stack = new Stack<>();
-        stack.addElement(root);
-        String line;
-        int i = 0;
-        try (BufferedReader reader = new BufferedReader(new FileReader("list.txt"))) {
-            while ((line = reader.readLine()) != null) {
-                if (line.split("~")[0].equals("{")) {
-                    stack.addElement(new ListItem(line.split("~")[1], i, Integer.parseInt(line.split("~")[2])));
-                } else if (line.equals("}")) {
-                    ListItem tmp = stack.pop();
-                    stack.peek().getArrayList().add(tmp);
-                } else {
-                    stack.peek().getArrayList().add(new ListItem(line.split("~")[0], i, Integer.parseInt(line.split("~")[1])));
-                }
-                i += 1;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            storeNew(root);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return root;
-    }
+//    public ListItem readData() {
+//        ListItem root = new ListItem("root", null);
+//        Stack<ListItem> stack = new Stack<>();
+//        stack.addElement(root);
+//        String line;
+//        int i = 0;
+//        try (BufferedReader reader = new BufferedReader(new FileReader("list.txt"))) {
+//            while ((line = reader.readLine()) != null) {
+//                if (line.split("~")[0].equals("{")) {
+//                    stack.addElement(new ListItem(line.split("~")[1], i, Integer.parseInt(line.split("~")[2])));
+//                } else if (line.equals("}")) {
+//                    ListItem tmp = stack.pop();
+//                    stack.peek().getArrayList().add(tmp);
+//                } else {
+//                    stack.peek().getArrayList().add(new ListItem(line.split("~")[0], i, Integer.parseInt(line.split("~")[1])));
+//                }
+//                i += 1;
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            storeNew(root);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return root;
+//    }
 
-    public void swich(int i) throws FileNotFoundException {
+    public void swich(int i) throws IOException {
         ListItem all = getLists();
-        ListItem[] all2 = new ListItem[1];
-        all2[0] = all;
         ListItem item = getItem(all, i);
         item.swich();
-        PrintWriter writer = new PrintWriter("list.txt");
-        writer.write(toText(all, new StringBuilder()));
-        writer.flush();
-        writer.close();
+        storeNew(getRoot(item));
     }
 
+    //    public ListItem getItem(ListItem root, int id) {
+//        if (root.getId() == id) {
+//            return root;
+//        } else {
+//            for (int i = 0; i < root.getArrayList().size(); i++) {
+//                if (((ListItem) root.getArrayList().get(i)).getId() == id)
+//                    return (ListItem) root.getArrayList().get(i);
+//                getItem((ListItem) root.getArrayList().get(i), id);
+//            }
+//        }
+//        return null;
+//    }
     public ListItem getItem(ListItem root, int id) {
-        if (root.getId() == id) {
-            return root;
-        } else {
-            for (int i = 0; i < root.getArrayList().size(); i++) {
-                if (((ListItem) root.getArrayList().get(i)).getId() == id)
-                    return (ListItem) root.getArrayList().get(i);
-                return getItem((ListItem) root.getArrayList().get(i), id);
+        Stack<ListItem> stack = new Stack<>();
+        stack.add(root);
+        ListItem e;
+        while (!stack.isEmpty()) {
+            e = stack.pop();
+            if (e.getId() == id) return e;
+            for (ListItem l : e.getArrayList()) {
+                if (l.getId() == id) return l;
+                stack.add(l);
             }
         }
         return null;
     }
 
-    public String print(ListItem root, StringBuilder builder) {
-        if (root.getArrayList().size() == 0) {
-            if (!builder.toString().equals(""))
-                builder.append("<li><div class=\"form-check\">\n" +
-                                "  <label class=\"form-check-label\" for=\"flexCheckDefault\">\n")
-                        .append(root.getTitle())
-                        .append("  </label>\n" +
-                                "  <input class=\"form-check-input\" type=\"checkbox\"" +
-                                " id=\"")
-                        .append(root.getId())
-                        .append(root.getIsChecked() == 0 ? "\"" : "\" checked")
-                        .append("></div></li>");
-            builder.append("<div style='display: inline-block'><a href='").append(p).append("/del?id=")
-                    .append(root.getId()).append("'type=\"button\" class=\"btn btn-primary btn-sm\" style='display: inline-block'>удалить</a>")
-                    .append("<button id='").append(root.getId()).append("'type=\"button\" class=\"btn btn-primary btnAdd btn-sm\" data-bs-toggle=\"modal\" data-bs-target=\"#exampleModal\" style='display: inline-block'>добавить</button>")
-                    .append("</div>");
-        } else {
-            builder.append("<ol>");
-            for (int i = 0; i < root.getArrayList().size(); i++) {
-                print((ListItem) root.getArrayList().get(i), builder);
-            }
-            builder.append("</ol>")
-                    .append("<div style='display: inline-block'><a href='").append(p).append("/del?id=")
-                    .append(root.getId()).append("'type=\"button\" class=\"btn btn-primary btn-sm\" style='display: inline-block'>удалить</a>")
-                    .append("<button id='").append(root.getId()).append("'type=\"button\" class=\"btn btn-primary btnAdd btn-sm\" data-bs-toggle=\"modal\" data-bs-target=\"#exampleModal\" style='display: inline-block'>добавить</button>")
-                    .append("</div>");
-        }
-        return builder.toString();
+    public ListItem getRoot(ListItem elem) {
+        if (elem.getParrent() == null) return elem;
+        return getRoot(elem.getParrent());
     }
 
+    public StringBuilder rprint(ListItem root, StringBuilder builder) {
+        builder.append("<ol>");
+        for (ListItem i: root.getArrayList()) {
+            builder.append("<li><div class=\"form-check\">\n" +
+                            "  <label class=\"form-check-label\" for=\"flexCheckDefault\">\n")
+                    .append(i.getTitle())
+                    .append("  </label>\n" +
+                            "  <input class=\"form-check-input\" type=\"checkbox\"" +
+                            " id=\"")
+                    .append(i.getId())
+                    .append(i.getIsChecked() == 0 ? "\"" : "\" checked")
+                    .append("></div></li>");
+            builder.append("<div style='display: inline-block'><a href='").append(p).append("/del?id=")
+                    .append(i.getId()).append("'type=\"button\" class=\"btn btn-primary btn-sm\" style='display: inline-block'>удалить</a>")
+                    .append("<button id='").append(i.getId()).append("'type=\"button\" class=\"btn btn-primary btnAdd btn-sm\" data-bs-toggle=\"modal\" data-bs-target=\"#exampleModal\" style='display: inline-block'>добавить</button>")
+                    .append("</div>");
+            rprint(i, builder);
+        }
+        builder.append("</ol>");
+        return builder;
+    }
+    public String print(ListItem root) {
+        return rprint(root, new StringBuilder()).append("<div style='display: inline-block'><a href='").append(p).append("/del?id=")
+                .append(root.getId()).append("'type=\"button\" class=\"btn btn-primary btn-sm\" style='display: inline-block'>удалить</a>")
+                .append("<button id='").append(root.getId()).append("'type=\"button\" class=\"btn btn-primary btnAdd btn-sm\" data-bs-toggle=\"modal\" data-bs-target=\"#exampleModal\" style='display: inline-block'>добавить</button>")
+                .append("</div>").toString();
+    }
+
+
+    @Deprecated
     public String toText(ListItem root, StringBuilder builder) {
         if (root.getArrayList().size() == 0) {
             if (!builder.toString().equals(""))
@@ -147,29 +163,17 @@ public class DataAdapter {
         return builder.substring(9, builder.toString().length() - 2);
     }
 
-    public ListItem delete(ListItem root, String ir) {
-        int id = Integer.parseInt(ir);
-        if (root == null)
-            root = getLists();
-        for (int i = 0; i < root.getArrayList().size(); i++) {
-            if (((ListItem) root.getArrayList().get(i)).getId() == id) {
-                root.getArrayList().remove(i);
-                return root;
-            }
-            delete((ListItem) root.getArrayList().get(i), ir);
-        }
-        return null;
+    public void delete(int id) throws IOException {
+        ListItem item = getItem(getLists(), id);
+        ListItem parrent = item.getParrent();
+        parrent.getArrayList().remove(item);
+        storeNew(getRoot(parrent));
     }
 
     public void add(String id, String title) throws IOException {
-        ListItem all = getLists();
-        if (id.equals("root")) {
-            all.getArrayList().add(new ListItem(title));
-            storeNew(all);
-            return;
-        }
-        ListItem item = getItem(all, Integer.parseInt(id));
-        item.getArrayList().add(new ListItem(title));
-        storeNew(all);
+        ListItem item = getItem(getLists(), Integer.parseInt(id));
+        item.getArrayList().add(new ListItem(title, item));
+        ListItem lk = getRoot(item);
+        storeNew(getRoot(item));
     }
 }

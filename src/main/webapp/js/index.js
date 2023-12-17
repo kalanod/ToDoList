@@ -12,7 +12,7 @@ $(".btnAdd").click(function (){
     $("#tmp").val(this.id)
 })
 $("#root").click(function (){
-    $("#tmp").val(this.id)
+    $("#tmp").val(-1)
 })
 $(".doAdd").click(function (){
     $.ajax({

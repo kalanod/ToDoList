@@ -13,6 +13,7 @@ import java.io.IOException;
 public class SwitchServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("swich id=" + req.getParameter("id"));
         new DataAdapter(req.getContextPath()).swich(Integer.parseInt(req.getParameter("id")));
     }
 }

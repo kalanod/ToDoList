@@ -8,27 +8,34 @@ public class ListItem implements Serializable {
     int id;
     int isChecked;
     String title;
-    ArrayList<Object> arrayList;
+    ArrayList<ListItem> arrayList;
+    ListItem parrent;
 
-    public ListItem(String title) {
+    public ListItem(String title, ListItem parrent) {
         this.title = title;
         arrayList = new ArrayList<>();
         isChecked = 0;
         id = new Random().nextInt(999999999);
+        this.parrent = parrent;
     }
-    public ListItem(String title, int id, int c) {
+    public ListItem(String title, int id, int c, ListItem parrent) {
         this.id = id;
         this.title = title;
         arrayList = new ArrayList<>();
         isChecked = c;
+        this.parrent = parrent;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public ArrayList<Object> getArrayList() {
+    public ArrayList<ListItem> getArrayList() {
         return arrayList;
+    }
+
+    public ListItem getParrent() {
+        return parrent;
     }
 
     public int getId() {

@@ -59,8 +59,7 @@
             </h2>
             <div id="akk<%=i%>" class="accordion-collapse collapse show">
                 <div class="accordion-body">
-                    <%=adapter.print((ListItem) list.getArrayList().get(i), new StringBuilder())%>
-
+                    <%=adapter.print(list.getArrayList().get(i))%>
                 </div>
             </div>
         </div>
