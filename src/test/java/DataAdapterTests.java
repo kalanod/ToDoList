@@ -7,7 +7,7 @@ import java.io.IOException;
 public class DataAdapterTests {
     @Test
     public void test1() throws IOException {
-        DataAdapter adapter = new DataAdapter("/ToDoList-1.0-SNAPSHOT");
+        DataAdapter adapter = new DataAdapter("/ToDoList-1.0-SNAPSHOT", 1);
         adapter.clear();
         System.out.println(System.getProperty("user.dir"));
         ListItem elem = new ListItem("root", -1, 0, null);
@@ -17,7 +17,7 @@ public class DataAdapterTests {
     }
     @Test
     public void test2() throws IOException {
-        DataAdapter adapter = new DataAdapter("/ToDoList-1.0-SNAPSHOT");
+        DataAdapter adapter = new DataAdapter("/ToDoList-1.0-SNAPSHOT", 1);
         adapter.clear();
         System.out.println(System.getProperty("user.dir"));
         ListItem elem = new ListItem("root", -1, 0, null);

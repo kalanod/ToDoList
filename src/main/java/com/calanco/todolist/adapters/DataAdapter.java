@@ -3,16 +3,29 @@ package com.calanco.todolist.adapters;
 import com.calanco.todolist.model.ListItem;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.Base64;
 import java.util.Stack;
 
 public class DataAdapter {
 
     String p;
+    DbHandler dbHandler;
+    String sessionId;
 
 
-    public DataAdapter(String p) {
+    public DataAdapter(String p, int id) {
         this.p = p;
+        try {
+            sessionId = String.valueOf(id);
+            dbHandler = new DbHandler();
+            dbHandler.createTable();
+        } catch (SQLException e) {
+            sessionId = "-1";
+            e.printStackTrace();
+        }
     }
 
     public ListItem getLists() {
@@ -27,9 +40,11 @@ public class DataAdapter {
     }
 
     public void storeNew(ListItem listItem) throws IOException {
-        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("list.ser"));
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
         oos.writeObject(listItem);
         oos.close();
+        dbHandler.addList(sessionId, Base64.getEncoder().encodeToString(baos.toByteArray()));
     }
     public void clear() throws IOException {
         PrintWriter printWriter = new PrintWriter("list.ser");
@@ -42,7 +57,11 @@ public class DataAdapter {
         ObjectInputStream objectinputstream = null;
         ListItem readCase = null;
         try {
-            FileInputStream streamIn = new FileInputStream("list.ser");
+            //FileInputStream streamIn = new FileInputStream("list.ser");
+
+            String all = dbHandler.getListByUserId(sessionId);
+            byte [] data = Base64.getDecoder().decode(all);
+            InputStream streamIn = new ByteArrayInputStream(data);
             objectinputstream = new ObjectInputStream(streamIn);
             readCase = (ListItem) objectinputstream.readObject();
         } catch (Exception e) {
@@ -180,5 +199,10 @@ public class DataAdapter {
         item.getArrayList().add(new ListItem(title, item, date, type));
         ListItem lk = getRoot(item);
         storeNew(getRoot(item));
+    }
+    public void addToRoot(ListItem item) throws IOException, ParseException {
+        ListItem root = getLists();
+        root.getArrayList().add(item);
+        storeNew(root);
     }
 }

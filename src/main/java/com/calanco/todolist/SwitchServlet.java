@@ -1,6 +1,7 @@
 package com.calanco.todolist;
 
 import com.calanco.todolist.adapters.DataAdapter;
+import com.calanco.todolist.model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,6 +15,6 @@ public class SwitchServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         System.out.println("swich id=" + req.getParameter("id"));
-        new DataAdapter(req.getContextPath()).swich(Integer.parseInt(req.getParameter("id")));
+        new DataAdapter(req.getContextPath(),((User) req.getSession().getAttribute("User")).getId()).swich(Integer.parseInt(req.getParameter("id")));
     }
 }

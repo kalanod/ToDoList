@@ -28,6 +28,8 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
     testImplementation 'org.junit.jupiter:junit-jupiter:5.7.1'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation group:'org.xerial', name:'sqlite-jdbc', version:'3.8.11.2'
+
 }
 
 test {

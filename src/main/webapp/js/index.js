@@ -1,12 +1,27 @@
 $(".form-check-input").change(function () {
     $.ajax({
-        url: "/Gradle___com_calanco___ToDoList_1_0_SNAPSHOT_war/switch",
+        url: "/ToDoList-1.0-SNAPSHOT/switch",
         method: 'POST',
         data: {
             id: this.id
         }
     });
 })
+var el;
+$(".doShare").click(function (){
+    $.ajax({
+        url: "/ToDoList-1.0-SNAPSHOT/share",
+        method: 'POST',
+        data: {
+            idUser2: $("#sharefloatingInput").val(),
+            idElem: el
+        }
+    });
+})
+$(".shareBtn").click(function (){
+    el = this.id.split("_")[1]
+})
+
 $(".form-select").hide()
 $("#start").hide()
 $("#tmp").hide()
@@ -29,7 +44,7 @@ $("#srtBtn").click(function (){
 })
 $(".doAdd").click(function (){
     $.ajax({
-        url: "/Gradle___com_calanco___ToDoList_1_0_SNAPSHOT_war/add",
+        url: "/ToDoList-1.0-SNAPSHOT/add",
         method: 'POST',
         data: {
             id: $("#tmp").val(),
