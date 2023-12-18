@@ -19,8 +19,7 @@
     <title>ToDoList</title>
 </head>
 <body>
-<%
-    DataAdapter adapter = new DataAdapter(request.getContextPath(), -1);%>
+<%DataAdapter adapter = new DataAdapter(request.getContextPath(), -1);%>
 <!-- Modal -->
 <h1 id="tmp"></h1>
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
