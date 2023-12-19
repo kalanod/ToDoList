@@ -1,6 +1,6 @@
 $(".form-check-input").change(function () {
     $.ajax({
-        url: "/ToDoList-1.0-SNAPSHOT/switch",
+        url: "/Gradle___com_calanco___ToDoList_1_0_SNAPSHOT_war/switch",
         method: 'POST',
         data: {
             id: this.id
@@ -10,7 +10,7 @@ $(".form-check-input").change(function () {
 var el;
 $(".doShare").click(function (){
     $.ajax({
-        url: "/ToDoList-1.0-SNAPSHOT/share",
+        url: "/Gradle___com_calanco___ToDoList_1_0_SNAPSHOT_war/share",
         method: 'POST',
         data: {
             idUser2: $("#sharefloatingInput").val(),
@@ -44,7 +44,7 @@ $("#srtBtn").click(function (){
 })
 $(".doAdd").click(function (){
     $.ajax({
-        url: "/ToDoList-1.0-SNAPSHOT/add",
+        url: "/Gradle___com_calanco___ToDoList_1_0_SNAPSHOT_war/add",
         method: 'POST',
         data: {
             id: $("#tmp").val(),

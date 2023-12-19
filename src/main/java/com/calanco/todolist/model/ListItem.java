@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ListItem implements Serializable {
+    private static final long serialVersionUID = 6529685098267757690L;
     int id;
     int isChecked;
     String title;
@@ -29,6 +30,15 @@ public class ListItem implements Serializable {
         this.parrent = parrent;
         this.type = parrent.getParrent() != null? -1: Integer.parseInt(type);
         this.date = parrent.getParrent() != null? null: parseDate(date);
+    }
+    public ListItem(String title, ListItem parrent, Calendar date, int type) throws ParseException {
+        this.title = title;
+        arrayList = new ArrayList<>();
+        isChecked = 0;
+        id = new Random().nextInt(999999999);
+        this.parrent = parrent;
+        this.type = type;
+        this.date = date;
     }
     public ListItem(String title, int id, int c, ListItem parrent) {
         this.id = id;
@@ -120,5 +130,13 @@ public class ListItem implements Serializable {
 
     public int getType() {
         return type;
+    }
+
+    public void setId(int nextInt) {
+        id = nextInt;
+    }
+
+    public void setIsChecked(int b) {
+        isChecked = b;
     }
 }

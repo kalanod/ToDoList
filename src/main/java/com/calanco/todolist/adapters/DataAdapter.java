@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Base64;
+import java.util.Random;
 import java.util.Stack;
 
 public class DataAdapter {
@@ -202,7 +203,10 @@ public class DataAdapter {
     }
     public void addToRoot(ListItem item) throws IOException, ParseException {
         ListItem root = getLists();
-        root.getArrayList().add(item);
+        ListItem nel = new ListItem(item.getTitle(),
+                root, item.getDate(), item.getType());
+        nel.setId(new Random().nextInt(999999999));
+        root.getArrayList().add(nel);
         storeNew(root);
     }
 }
