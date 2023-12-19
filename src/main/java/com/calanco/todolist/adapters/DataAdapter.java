@@ -6,6 +6,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Random;
 import java.util.Stack;
@@ -204,7 +205,7 @@ public class DataAdapter {
     public void addToRoot(ListItem item) throws IOException, ParseException {
         ListItem root = getLists();
         ListItem nel = new ListItem(item.getTitle(),
-                root, item.getDate(), item.getType());
+                root, item.getDate(), item.getType(), new ArrayList<>(item.getArrayList()));
         nel.setId(new Random().nextInt(999999999));
         root.getArrayList().add(nel);
         storeNew(root);

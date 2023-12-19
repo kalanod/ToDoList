@@ -31,9 +31,10 @@ public class ListItem implements Serializable {
         this.type = parrent.getParrent() != null? -1: Integer.parseInt(type);
         this.date = parrent.getParrent() != null? null: parseDate(date);
     }
-    public ListItem(String title, ListItem parrent, Calendar date, int type) throws ParseException {
+
+    public ListItem(String title, ListItem parrent, Calendar date, int type, ArrayList<ListItem> l) throws ParseException {
         this.title = title;
-        arrayList = new ArrayList<>();
+        arrayList = l;
         isChecked = 0;
         id = new Random().nextInt(999999999);
         this.parrent = parrent;
