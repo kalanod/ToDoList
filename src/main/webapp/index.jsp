@@ -152,17 +152,17 @@
 </div>
 <%} else {%>
 
-<form class="row g-3" action="${pageContext.request.contextPath}/login" method="post">
+<form class="row g-3" action="${pageContext.request.contextPath}/login" style="background-color: aqua; display: block; margin-left: auto; margin-right: auto" method="post">
     <div class="col-auto">
-        <input type="text" class="form-control" name="username" id="usenameInput" placeholder="">
+        <input type="text" name="username" id="usenameInput" placeholder="">
         <label for="usenameInput">Username</label>
     </div>
     <div class="col-auto">
-        <input type="text" class="form-control" name="password" id="passwordInput" placeholder="">
+        <input type="text" name="password" id="passwordInput" placeholder="">
         <label for="passwordInput">password</label>
     </div>
     <div class="col-auto">
-        <button type="submit" class="login close btn btn-primary">Добавить</button>
+        <button type="submit" class="login close btn btn-primary">авторизовать</button>
     </div>
 </form>
 <%}%>
